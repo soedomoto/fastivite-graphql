@@ -1,0 +1,38 @@
+{
+  "name": "fastivite-graphql",
+  "version": "1.0.5",
+  "author": "Soedomoto <soedomoto@gmail.com>",
+  "description": "Create monolithic app made easy by using combination of fastify + mercurius + mercurius-codegen and vite + graphql-codegen",
+  "type": "module",
+  "main": "./index.js",
+  "types": "./index.d.ts",
+  "bin": {
+    "fastivite-graphql": "./fastivite-graphql.js"
+  },
+  "keywords": [],
+  "license": "ISC",
+  "peerDependencies": {
+    "chokidar": "^3.6.0",
+    "commander": "^12.1.0",
+    "fastivite": "^1.0.5",
+    "glob": "^10.4.1",
+    "lodash": "^4.17.21",
+    "mercurius": "^14.1.0",
+    "mercurius-codegen": "^5.0.5"
+  },
+  "devDependencies": {
+    "@graphql-codegen/cli": "^5.0.2",
+    "@graphql-codegen/client-preset": "^4.2.6",
+    "@parcel/watcher": "^2.4.1",
+    "chokidar": "^3.6.0",
+    "commander": "^12.1.0",
+    "esbuild": "^0.21.5",
+    "fastify": "^4.27.0",
+    "fastivite": "^1.0.5",
+    "glob": "^10.4.1",
+    "graphql": "^16.8.1",
+    "lodash": "^4.17.21",
+    "mercurius": "^14.1.0",
+    "mercurius-codegen": "^5.0.5"
+  }
+}

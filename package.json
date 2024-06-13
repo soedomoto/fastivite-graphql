@@ -1,6 +1,6 @@
 {
   "name": "fastivite-graphql",
-  "version": "1.0.9",
+  "version": "1.0.13",
   "author": "Soedomoto <soedomoto@gmail.com>",
   "description": "Create monolithic app made easy by using combination of fastify + mercurius + mercurius-codegen and vite + graphql-codegen",
   "type": "module",
@@ -24,27 +24,37 @@
   "keywords": [],
   "license": "ISC",
   "devDependencies": {
-    "@graphql-codegen/cli": "^5.0.2",
-    "@parcel/watcher": "^2.4.1",
+    "@fastify/cors": "^9.0.1",
+    "@fastify/middie": "^8.3.1",
     "@swc/cli": "^0.3.12",
     "@types/lodash": "^4.17.5",
     "@types/node": "^20.14.2",
     "concurrently": "^8.2.2",
-    "esbuild": "^0.21.5",
     "fastify": "^4.27.0",
-    "fastivite": "^1.0.7",
-    "glob": "^10.4.1",
-    "graphql": "^16.8.1",
-    "lodash": "^4.17.21",
+    "fastify-print-routes": "^3.2.0",
     "mercurius": "^14.1.0",
-    "mercurius-codegen": "^5.0.5",
-    "ts-node": "^10.9.2",
-    "tsup": "^8.1.0",
-    "tsx": "^4.15.2",
-    "typescript": "^5.2.2",
+    "sirv": "^2.0.4",
+    "tsx": "^4.15.4",
+    "typescript": "^5.4.5",
     "vite": "^5.2.13"
   },
   "dependencies": {
-    "commander": "^12.1.0"
+    "@graphql-codegen/cli": "^5.0.2",
+    "commander": "^12.1.0",
+    "esbuild": "^0.21.5",
+    "fastivite": "^1.0.12",
+    "glob": "^10.4.1",
+    "graphql": "^16.8.1",
+    "lodash": "^4.17.21",
+    "mercurius-codegen": "^5.0.5"
+  },
+  "peerDependencies": {
+    "@fastify/cors": "^9.0.1",
+    "@fastify/middie": "^8.3.1",
+    "fastify": "^4.27.0",
+    "fastify-print-routes": "^3.2.0",
+    "mercurius": "^14.1.0",
+    "sirv": "^2.0.4",
+    "vite": "^5.2.0"
   }
 }

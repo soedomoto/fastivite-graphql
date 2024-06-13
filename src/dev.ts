@@ -1,15 +1,26 @@
 import { runCli } from '@graphql-codegen/cli';
 import { build as esbuild } from 'esbuild';
-import { createDevServer } from 'fastivite';
+import { createDevServer, CreateDevServerParams } from 'fastivite';
 import { globSync } from 'glob';
 import { buildSchema } from 'graphql';
 import _ from 'lodash';
-import mercurius from 'mercurius';
+import mercurius, { MercuriusLoaders } from 'mercurius';
 import { codegenMercurius, loadSchemaFiles } from 'mercurius-codegen';
 import { join } from 'path';
 
-/** @type {import('..').GreateGraphqlDevServer} */
-const _createGraphqlDevServer = async ({
+export type CreateGraphqlDevServerParams = CreateDevServerParams & {
+  graphqlSchemaCwd: string
+  graphqlSchemaPattern: string | string[]
+  graphqlResolverCwd: string
+  graphqlResolverPattern: string[] | undefined
+  graphqlCodegen: boolean
+  graphqlOperationCodegen: boolean
+  graphqlOperationCodegenConfigFile: string | undefined
+  graphqlCodegenOut: string
+}
+
+
+export const createGraphqlDevServer = async ({
   host,
   port,
   base,
@@ -27,7 +38,7 @@ const _createGraphqlDevServer = async ({
   graphqlOperationCodegenConfigFile,
   graphqlCodegenOut,
   middleware = false,
-}) => {
+}: CreateGraphqlDevServerParams) => {
   let server = await createDevServer({
     host,
     port,
@@ -74,16 +85,18 @@ const _createGraphqlDevServer = async ({
     resolvers = _.defaultsDeep(resolvers, resolver?.default || {});
   }
 
-  /** @type {import('mercurius').MercuriusLoaders} */
-  let loaders = {};
+  let loaders: MercuriusLoaders = {};
 
-  /** @type {import('mercurius').MercuriusContext} */
-  let context = (req, rep) => {
-    return {};
-  };
+  // let context: MercuriusContext = (req: FastifyRequest, rep: FastifyReply) => {
+  //   return {};
+  // };
+
+  let graphqlSchemaPattern2: string[] = [];
+  if (typeof graphqlSchemaPattern == 'string') graphqlSchemaPattern2 = [...graphqlSchemaPattern2, graphqlSchemaPattern];
+  else graphqlSchemaPattern2 = [...graphqlSchemaPattern2, ...graphqlSchemaPattern];
 
   let { schema } = loadSchemaFiles(
-    graphqlSchemaPattern.map((p) => join(graphqlSchemaCwd, p)),
+    graphqlSchemaPattern2.map((p) => join(graphqlSchemaCwd, p)),
     {
       watchOptions: {
         enabled: true,
@@ -103,13 +116,13 @@ const _createGraphqlDevServer = async ({
     schema,
     resolvers: resolvers,
     loaders: loaders,
-    context: context,
+    // context: context,
     subscription: true,
     graphiql: true,
   });
 
   if (!middleware) {
-    let address = await server.listen({ host: host, port: parseInt(port) });
+    let address = await server.listen({ host: host, port: port });
     console.log('Fastivite dev server is listening at', address);
   }
 
@@ -122,11 +135,8 @@ const _createGraphqlDevServer = async ({
       await runCli(
         `--watch --verbose --debug ${graphqlOperationCodegenConfigFile ? `--config ${graphqlOperationCodegenConfigFile}` : ``}`
       );
-    } catch (err) {}
+    } catch (err) { }
   }
 
   return server;
 };
-
-export const createGraphqlDevServer = _createGraphqlDevServer;
-export default { createGraphqlDevServer: _createGraphqlDevServer };

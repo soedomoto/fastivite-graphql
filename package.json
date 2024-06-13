@@ -1,38 +1,52 @@
 {
   "name": "fastivite-graphql",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "author": "Soedomoto <soedomoto@gmail.com>",
   "description": "Create monolithic app made easy by using combination of fastify + mercurius + mercurius-codegen and vite + graphql-codegen",
   "type": "module",
-  "main": "./index.js",
-  "types": "./index.d.ts",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "bin": {
-    "fastivite-graphql": "./fastivite-graphql.js"
+    "fastivite-graphql": "./dist/cli.js"
+  },
+  "scripts": {
+    "fastivite-graphql": "./dist/cli.js",
+    "dev": "swc --strip-leading-paths --delete-dir-on-start -s -w -d dist src",
+    "build": "swc --strip-leading-paths --delete-dir-on-start -d dist src",
+    "postbuild": "concurrently npm:typecheck",
+    "format": "prettier -w src test",
+    "typecheck": "tsc -p . --emitDeclarationOnly"
   },
   "keywords": [],
   "license": "ISC",
-  "peerDependencies": {
-    "chokidar": "^3.6.0",
-    "commander": "^12.1.0",
-    "fastivite": "^1.0.5",
-    "glob": "^10.4.1",
-    "lodash": "^4.17.21",
-    "mercurius": "^14.1.0",
-    "mercurius-codegen": "^5.0.5"
-  },
   "devDependencies": {
     "@graphql-codegen/cli": "^5.0.2",
-    "@graphql-codegen/client-preset": "^4.2.6",
-    "@parcel/watcher": "^2.4.1",
-    "chokidar": "^3.6.0",
+    "@types/lodash": "^4.17.5",
+    "@types/node": "^20.14.2",
     "commander": "^12.1.0",
-    "esbuild": "^0.21.5",
+    "concurrently": "^8.2.2",
     "fastify": "^4.27.0",
-    "fastivite": "^1.0.5",
+    "fastivite": "^1.0.6",
     "glob": "^10.4.1",
     "graphql": "^16.8.1",
     "lodash": "^4.17.21",
     "mercurius": "^14.1.0",
-    "mercurius-codegen": "^5.0.5"
+    "mercurius-codegen": "^5.0.5",
+    "ts-node": "^10.9.2",
+    "tsup": "^8.1.0",
+    "tsx": "^4.15.2",
+    "typescript": "^5.2.2"
+  },
+  "peerDependencies": {
+    "@parcel/watcher": "^2.4.1",
+    "esbuild": "^0.21.5",
+    "vite": "^5.2.0"
+  },
+  "dependencies": {
+    "@swc/cli": "^0.3.12"
   }
 }

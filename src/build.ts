@@ -1,9 +1,15 @@
 import { build as esbuild } from 'esbuild';
-import { buildVite } from 'fastivite';
+import { BuildServerParams, buildVite } from 'fastivite';
 import { readFileSync, rmSync, writeFileSync } from 'fs';
 import { loadSchemaFiles } from 'mercurius-codegen';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
+
+export type BuildGraphqlServerParams = BuildServerParams & {
+  graphqlSchemaCwd: string
+  graphqlSchemaPattern: string | string[]
+  graphqlCodegenOut: string
+}
 
 let _filename = '';
 try {
@@ -12,14 +18,17 @@ try {
   _filename = __filename;
 }
 
-/** @type {import('..').BuildGraphqlServer} */
-const _buildGraphqlServer = async (params) => {
+export const buildGraphqlServer = async (params: BuildGraphqlServerParams) => {
   // Build vite
   await buildVite(params);
 
   // Build graphql server
+  let graphqlSchemaPattern: string[] = [];
+  if (typeof params?.graphqlSchemaPattern == 'string') graphqlSchemaPattern = [...graphqlSchemaPattern, params?.graphqlSchemaPattern];
+  else graphqlSchemaPattern = [...graphqlSchemaPattern, ...params?.graphqlSchemaPattern];
+
   let { schema } = loadSchemaFiles(
-    params?.graphqlSchemaPattern.map((p) => join(params?.graphqlSchemaCwd, p))
+    graphqlSchemaPattern.map((p) => join(params?.graphqlSchemaCwd, p))
   );
 
   writeFileSync(`${params?.outDir}/schema.gql`, schema.join('\n\n'));
@@ -40,6 +49,3 @@ const _buildGraphqlServer = async (params) => {
   rmSync(tmpJs, { recursive: true, force: true });
   rmSync(`${params?.outDir}/server`, { recursive: true, force: true });
 };
-
-export const buildGraphqlServer = _buildGraphqlServer;
-export default { buildGraphqlServer: _buildGraphqlServer };

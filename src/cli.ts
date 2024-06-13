@@ -1,11 +1,9 @@
-#! /usr/bin/env tsx
+#! /usr/bin/env node
 
 import { program } from 'commander';
-import {
-  buildGraphqlServer,
-  createGraphqlDevServer,
-  previewGraphqlServer,
-} from '.';
+import { createGraphqlDevServer } from './dev.js';
+import { buildGraphqlServer } from './build.js';
+import { previewGraphqlServer } from './preview.js';
 
 (async () => {
   program
